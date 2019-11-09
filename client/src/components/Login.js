@@ -1,10 +1,30 @@
-import React from "react";
-import { axiosWithAuth } from "../../../server";
+import React, { useState } from "react";
+import { axiosWithAuth } from "./axiosAuth";
 
-const Login = () => {
-  // make a post request to retrieve a token from the api
+// establishing props and setting credentials to use state.
+const Login = (props) => {
+  const [credentials, setCredentials] = useState({});
+
+  // make a post request to retrieve a token from the api and prevent default :) 
+  const login = e => {
+    e.preventDefault();
+    axiosWithAuth().post('login/endpoint', credentials)
+    .then( res => {
+      localStorage.setItem('token', res.data.token);
+      this.props.histroy.push('/');
+    })
+  }
+
+  // handle change function to execute form inputs.
+  const handleChange = e => {
+    setCredentials: {
+      ...credentials, 
+      [e.target.name]; e.target.value
+    }
+  }
 
   // when you have handled the token, navigate to the BubblePage route
+  
   return (
     <>
       <h1>Welcome to the Bubble App!</h1>
@@ -27,7 +47,6 @@ const Login = () => {
           <button>Log in</button>
         </form>
       
-      <button>Login</button>
     </>
   );
 };
